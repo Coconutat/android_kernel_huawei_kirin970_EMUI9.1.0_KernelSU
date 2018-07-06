@@ -25,8 +25,8 @@
 #include <net/inet_frag.h>
 #include <net/inet_ecn.h>
 
-#define INETFRAGS_EVICT_BUCKETS   128
-#define INETFRAGS_EVICT_MAX	  512
+#define INETFRAGS_EVICT_BUCKETS 128
+#define INETFRAGS_EVICT_MAX 512
 
 /* don't rebuild inetfrag table with new secret more often than this */
 #define INETFRAGS_MIN_REBUILD_INTERVAL (5 * HZ)
@@ -37,18 +37,27 @@
  */
 const u8 ip_frag_ecn_table[16] = {
 	/* at least one fragment had CE, and others ECT_0 or ECT_1 */
-	[IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0]			= INET_ECN_CE,
-	[IPFRAG_ECN_CE | IPFRAG_ECN_ECT_1]			= INET_ECN_CE,
-	[IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0 | IPFRAG_ECN_ECT_1]	= INET_ECN_CE,
+	[IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0] = INET_ECN_CE,
+	[IPFRAG_ECN_CE |
+		IPFRAG_ECN_ECT_1] = INET_ECN_CE,
+	[IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0 |
+		IPFRAG_ECN_ECT_1] = INET_ECN_CE,
 
 	/* invalid combinations : drop frame */
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE] = 0xff,
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_ECT_0] = 0xff,
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_ECT_1] = 0xff,
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_ECT_0 | IPFRAG_ECN_ECT_1] = 0xff,
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0] = 0xff,
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE | IPFRAG_ECN_ECT_1] = 0xff,
-	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0 | IPFRAG_ECN_ECT_1] = 0xff,
+	[IPFRAG_ECN_NOT_ECT |
+		IPFRAG_ECN_CE] = 0xff,
+	[IPFRAG_ECN_NOT_ECT |
+		IPFRAG_ECN_ECT_0] = 0xff,
+	[IPFRAG_ECN_NOT_ECT |
+		IPFRAG_ECN_ECT_1] = 0xff,
+	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_ECT_0 |
+		IPFRAG_ECN_ECT_1] = 0xff,
+	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE |
+		IPFRAG_ECN_ECT_0] = 0xff,
+	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE |
+		IPFRAG_ECN_ECT_1] = 0xff,
+	[IPFRAG_ECN_NOT_ECT | IPFRAG_ECN_CE | IPFRAG_ECN_ECT_0 |
+		IPFRAG_ECN_ECT_1] = 0xff,
 };
 EXPORT_SYMBOL(ip_frag_ecn_table);
 
@@ -61,7 +70,7 @@ inet_frag_hashfn(const struct inet_frags *f, const struct inet_frag_queue *q)
 static bool inet_frag_may_rebuild(struct inet_frags *f)
 {
 	return time_after(jiffies,
-	       f->last_rebuild_jiffies + INETFRAGS_MIN_REBUILD_INTERVAL);
+					  f->last_rebuild_jiffies + INETFRAGS_MIN_REBUILD_INTERVAL);
 }
 
 static void inet_frag_secret_rebuild(struct inet_frags *f)
@@ -75,7 +84,8 @@ static void inet_frag_secret_rebuild(struct inet_frags *f)
 
 	get_random_bytes(&f->rnd, sizeof(u32));
 
-	for (i = 0; i < INETFRAGS_HASHSZ; i++) {
+	for (i = 0; i < INETFRAGS_HASHSZ; i++)
+	{
 		struct inet_frag_bucket *hb;
 		struct inet_frag_queue *q;
 		struct hlist_node *n;
@@ -83,10 +93,12 @@ static void inet_frag_secret_rebuild(struct inet_frags *f)
 		hb = &f->hash[i];
 		spin_lock(&hb->chain_lock);
 
-		hlist_for_each_entry_safe(q, n, &hb->chain, list) {
+		hlist_for_each_entry_safe(q, n, &hb->chain, list)
+		{
 			unsigned int hval = inet_frag_hashfn(f, q);
 
-			if (hval != i) {
+			if (hval != i)
+			{
 				struct inet_frag_bucket *hb_dest;
 
 				hlist_del(&q->list);
@@ -103,7 +115,7 @@ static void inet_frag_secret_rebuild(struct inet_frags *f)
 				 * that we've taken above.
 				 */
 				spin_lock_nested(&hb_dest->chain_lock,
-						 SINGLE_DEPTH_NESTING);
+								 SINGLE_DEPTH_NESTING);
 				hlist_add_head(&q->list, &hb_dest->chain);
 				spin_unlock(&hb_dest->chain_lock);
 			}
@@ -123,7 +135,7 @@ static bool inet_fragq_should_evict(const struct inet_frag_queue *q)
 		return false;
 
 	return q->net->low_thresh == 0 ||
-	       frag_mem_limit(q->net) >= q->net->low_thresh;
+		   frag_mem_limit(q->net) >= q->net->low_thresh;
 }
 
 static unsigned int
@@ -136,7 +148,8 @@ inet_evict_bucket(struct inet_frags *f, struct inet_frag_bucket *hb)
 
 	spin_lock(&hb->chain_lock);
 
-	hlist_for_each_entry_safe(fq, n, &hb->chain, list) {
+	hlist_for_each_entry_safe(fq, n, &hb->chain, list)
+	{
 		if (!inet_fragq_should_evict(fq))
 			continue;
 
@@ -150,7 +163,7 @@ inet_evict_bucket(struct inet_frags *f, struct inet_frag_bucket *hb)
 	spin_unlock(&hb->chain_lock);
 
 	hlist_for_each_entry_safe(fq, n, &expired, list_evictor)
-		f->frag_expire((unsigned long) fq);
+		f->frag_expire((unsigned long)fq);
 
 	return evicted;
 }
@@ -167,7 +180,8 @@ static void inet_frag_worker(struct work_struct *work)
 
 	local_bh_disable();
 
-	for (i = ACCESS_ONCE(f->next_bucket); budget; --budget) {
+	for (i = ACCESS_ONCE(f->next_bucket); budget; --budget)
+	{
 		evicted += inet_evict_bucket(f, &f->hash[i]);
 		i = (i + 1) & (INETFRAGS_HASHSZ - 1);
 		if (evicted > INETFRAGS_EVICT_MAX)
@@ -194,7 +208,8 @@ int inet_frags_init(struct inet_frags *f)
 
 	INIT_WORK(&f->frags_work, inet_frag_worker);
 
-	for (i = 0; i < INETFRAGS_HASHSZ; i++) {
+	for (i = 0; i < INETFRAGS_HASHSZ; i++)
+	{
 		struct inet_frag_bucket *hb = &f->hash[i];
 
 		spin_lock_init(&hb->chain_lock);
@@ -204,7 +219,7 @@ int inet_frags_init(struct inet_frags *f)
 	seqlock_init(&f->rnd_seqlock);
 	f->last_rebuild_jiffies = 0;
 	f->frags_cachep = kmem_cache_create(f->frags_cache_name, f->qsize, 0, 0,
-					    NULL);
+										NULL);
 	if (!f->frags_cachep)
 		return -ENOMEM;
 
@@ -230,211 +245,220 @@ evict_again:
 	local_bh_disable();
 	seq = read_seqbegin(&f->rnd_seqlock);
 
-	for (i = 0; i < INETFRAGS_HASHSZ ; i++)
+	for (i = 0; i < INETFRAGS_HASHSZ; i++)
 		inet_evict_bucket(f, &f->hash[i]);
 
-	local_bh_enable();
-	cond_resched();
+	void inet_frags_exit_net(struct netns_frags * nf)
+	{
+		nf->high_thresh = 0; /* prevent creation of new frags */
 
-	if (read_seqretry(&f->rnd_seqlock, seq) ||
-	    sum_frag_mem_limit(nf))
-		goto evict_again;
-}
-EXPORT_SYMBOL(inet_frags_exit_net);
+		if (read_seqretry(&f->rnd_seqlock, seq) ||
+			sum_frag_mem_limit(nf))
+			goto evict_again;
+	}
+	EXPORT_SYMBOL(inet_frags_exit_net);
 
-static struct inet_frag_bucket *
-get_frag_bucket_locked(struct inet_frag_queue *fq, struct inet_frags *f)
-__acquires(hb->chain_lock)
-{
-	struct inet_frag_bucket *hb;
-	unsigned int seq, hash;
+	static struct inet_frag_bucket *
+		get_frag_bucket_locked(struct inet_frag_queue * fq, struct inet_frags * f)
+			__acquires(hb->chain_lock)
+	{
+		struct inet_frag_bucket *hb;
+		unsigned int seq, hash;
 
- restart:
-	seq = read_seqbegin(&f->rnd_seqlock);
+	restart:
+		seq = read_seqbegin(&f->rnd_seqlock);
 
-	hash = inet_frag_hashfn(f, fq);
-	hb = &f->hash[hash];
+		hash = inet_frag_hashfn(f, fq);
+		hb = &f->hash[hash];
 
-	spin_lock(&hb->chain_lock);
-	if (read_seqretry(&f->rnd_seqlock, seq)) {
+		spin_lock(&hb->chain_lock);
+		if (read_seqretry(&f->rnd_seqlock, seq))
+		{
+			spin_unlock(&hb->chain_lock);
+			goto restart;
+		}
+
+		return hb;
+	}
+
+	static inline void fq_unlink(struct inet_frag_queue * fq, struct inet_frags * f)
+	{
+		struct inet_frag_bucket *hb;
+
+		hb = get_frag_bucket_locked(fq, f);
+		hlist_del(&fq->list);
+		fq->flags |= INET_FRAG_COMPLETE;
 		spin_unlock(&hb->chain_lock);
-		goto restart;
 	}
 
-	return hb;
-}
+	void inet_frag_kill(struct inet_frag_queue * fq, struct inet_frags * f)
+	{
+		if (del_timer(&fq->timer))
+			atomic_dec(&fq->refcnt);
 
-static inline void fq_unlink(struct inet_frag_queue *fq, struct inet_frags *f)
-{
-	struct inet_frag_bucket *hb;
-
-	hb = get_frag_bucket_locked(fq, f);
-	hlist_del(&fq->list);
-	fq->flags |= INET_FRAG_COMPLETE;
-	spin_unlock(&hb->chain_lock);
-}
-
-void inet_frag_kill(struct inet_frag_queue *fq, struct inet_frags *f)
-{
-	if (del_timer(&fq->timer))
-		atomic_dec(&fq->refcnt);
-
-	if (!(fq->flags & INET_FRAG_COMPLETE)) {
-		fq_unlink(fq, f);
-		atomic_dec(&fq->refcnt);
+		if (!(fq->flags & INET_FRAG_COMPLETE))
+		{
+			fq_unlink(fq, f);
+			atomic_dec(&fq->refcnt);
+		}
 	}
-}
-EXPORT_SYMBOL(inet_frag_kill);
+	EXPORT_SYMBOL(inet_frag_kill);
 
-void inet_frag_destroy(struct inet_frag_queue *q, struct inet_frags *f)
-{
-	struct sk_buff *fp;
-	struct netns_frags *nf;
-	unsigned int sum, sum_truesize = 0;
+	void inet_frag_destroy(struct inet_frag_queue * q, struct inet_frags * f)
+	{
+		struct sk_buff *fp;
+		struct netns_frags *nf;
+		unsigned int sum, sum_truesize = 0;
 
-	WARN_ON(!(q->flags & INET_FRAG_COMPLETE));
-	WARN_ON(del_timer(&q->timer) != 0);
+		WARN_ON(!(q->flags & INET_FRAG_COMPLETE));
+		WARN_ON(del_timer(&q->timer) != 0);
 
-	/* Release all fragment data. */
-	fp = q->fragments;
-	nf = q->net;
-	while (fp) {
-		struct sk_buff *xp = fp->next;
+		/* Release all fragment data. */
+		fp = q->fragments;
+		nf = q->net;
+		while (fp)
+		{
+			struct sk_buff *xp = fp->next;
 
-		sum_truesize += fp->truesize;
-		kfree_skb(fp);
-		fp = xp;
+			sum_truesize += fp->truesize;
+			kfree_skb(fp);
+			fp = xp;
+		}
+		sum = sum_truesize + f->qsize;
+
+		if (f->destructor)
+			f->destructor(q);
+		kmem_cache_free(f->frags_cachep, q);
+
+		sub_frag_mem_limit(nf, sum);
 	}
-	sum = sum_truesize + f->qsize;
+	EXPORT_SYMBOL(inet_frag_destroy);
 
-	if (f->destructor)
-		f->destructor(q);
-	kmem_cache_free(f->frags_cachep, q);
-
-	sub_frag_mem_limit(nf, sum);
-}
-EXPORT_SYMBOL(inet_frag_destroy);
-
-static struct inet_frag_queue *inet_frag_intern(struct netns_frags *nf,
-						struct inet_frag_queue *qp_in,
-						struct inet_frags *f,
-						void *arg)
-{
-	struct inet_frag_bucket *hb = get_frag_bucket_locked(qp_in, f);
-	struct inet_frag_queue *qp;
+	static struct inet_frag_queue *inet_frag_intern(struct netns_frags * nf,
+													struct inet_frag_queue * qp_in,
+													struct inet_frags * f,
+													void *arg)
+	{
+		struct inet_frag_bucket *hb = get_frag_bucket_locked(qp_in, f);
+		struct inet_frag_queue *qp;
 
 #ifdef CONFIG_SMP
-	/* With SMP race we have to recheck hash table, because
+		/* With SMP race we have to recheck hash table, because
 	 * such entry could have been created on other cpu before
 	 * we acquired hash bucket lock.
 	 */
-	hlist_for_each_entry(qp, &hb->chain, list) {
-		if (qp->net == nf && f->match(qp, arg)) {
-			atomic_inc(&qp->refcnt);
-			spin_unlock(&hb->chain_lock);
-			qp_in->flags |= INET_FRAG_COMPLETE;
-			inet_frag_put(qp_in, f);
-			return qp;
+		hlist_for_each_entry(qp, &hb->chain, list)
+		{
+			if (qp->net == nf && f->match(qp, arg))
+			{
+				atomic_inc(&qp->refcnt);
+				spin_unlock(&hb->chain_lock);
+				qp_in->flags |= INET_FRAG_COMPLETE;
+				inet_frag_put(qp_in, f);
+				return qp;
+			}
 		}
-	}
 #endif
-	qp = qp_in;
-	if (!mod_timer(&qp->timer, jiffies + nf->timeout))
+		qp = qp_in;
+		if (!mod_timer(&qp->timer, jiffies + nf->timeout))
+			atomic_inc(&qp->refcnt);
+
 		atomic_inc(&qp->refcnt);
+		hlist_add_head(&qp->list, &hb->chain);
 
-	atomic_inc(&qp->refcnt);
-	hlist_add_head(&qp->list, &hb->chain);
+		spin_unlock(&hb->chain_lock);
 
-	spin_unlock(&hb->chain_lock);
-
-	return qp;
-}
-
-static struct inet_frag_queue *inet_frag_alloc(struct netns_frags *nf,
-					       struct inet_frags *f,
-					       void *arg)
-{
-	struct inet_frag_queue *q;
-
-	q = kmem_cache_zalloc(f->frags_cachep, GFP_ATOMIC);
-	if (!q)
-		return NULL;
-
-	q->net = nf;
-	f->constructor(q, arg);
-	add_frag_mem_limit(nf, f->qsize);
-
-	setup_timer(&q->timer, f->frag_expire, (unsigned long)q);
-	spin_lock_init(&q->lock);
-	atomic_set(&q->refcnt, 1);
-
-	return q;
-}
-
-static struct inet_frag_queue *inet_frag_create(struct netns_frags *nf,
-						struct inet_frags *f,
-						void *arg)
-{
-	struct inet_frag_queue *q;
-
-	q = inet_frag_alloc(nf, f, arg);
-	if (!q)
-		return NULL;
-
-	return inet_frag_intern(nf, q, f, arg);
-}
-
-struct inet_frag_queue *inet_frag_find(struct netns_frags *nf,
-				       struct inet_frags *f, void *key,
-				       unsigned int hash)
-{
-	struct inet_frag_bucket *hb;
-	struct inet_frag_queue *q;
-	int depth = 0;
-
-	if (!nf->high_thresh || frag_mem_limit(nf) > nf->high_thresh) {
-		inet_frag_schedule_worker(f);
-		return NULL;
+		return qp;
 	}
 
-	if (frag_mem_limit(nf) > nf->low_thresh)
-		inet_frag_schedule_worker(f);
+	static struct inet_frag_queue *inet_frag_alloc(struct netns_frags * nf,
+												   struct inet_frags * f,
+												   void *arg)
+	{
+		struct inet_frag_queue *q;
 
-	hash &= (INETFRAGS_HASHSZ - 1);
-	hb = &f->hash[hash];
+		q = kmem_cache_zalloc(f->frags_cachep, GFP_ATOMIC);
+		if (!q)
+			return NULL;
 
-	spin_lock(&hb->chain_lock);
-	hlist_for_each_entry(q, &hb->chain, list) {
-		if (q->net == nf && f->match(q, key)) {
-			atomic_inc(&q->refcnt);
-			spin_unlock(&hb->chain_lock);
-			return q;
+		q->net = nf;
+		f->constructor(q, arg);
+		add_frag_mem_limit(nf, f->qsize);
+
+		setup_timer(&q->timer, f->frag_expire, (unsigned long)q);
+		spin_lock_init(&q->lock);
+		atomic_set(&q->refcnt, 1);
+
+		return q;
+	}
+
+	static struct inet_frag_queue *inet_frag_create(struct netns_frags * nf,
+													struct inet_frags * f,
+													void *arg)
+	{
+		struct inet_frag_queue *q;
+
+		q = inet_frag_alloc(nf, f, arg);
+		if (!q)
+			return NULL;
+
+		return inet_frag_intern(nf, q, f, arg);
+	}
+
+	struct inet_frag_queue *inet_frag_find(struct netns_frags * nf,
+										   struct inet_frags * f, void *key,
+										   unsigned int hash)
+	{
+		struct inet_frag_bucket *hb;
+		struct inet_frag_queue *q;
+		int depth = 0;
+
+		if (!nf->high_thresh || frag_mem_limit(nf) > nf->high_thresh)
+		{
+			inet_frag_schedule_worker(f);
+			return NULL;
 		}
-		depth++;
+
+		if (frag_mem_limit(nf) > nf->low_thresh)
+			inet_frag_schedule_worker(f);
+
+		hash &= (INETFRAGS_HASHSZ - 1);
+		hb = &f->hash[hash];
+
+		spin_lock(&hb->chain_lock);
+		hlist_for_each_entry(q, &hb->chain, list)
+		{
+			if (q->net == nf && f->match(q, key))
+			{
+				atomic_inc(&q->refcnt);
+				spin_unlock(&hb->chain_lock);
+				return q;
+			}
+			depth++;
+		}
+		spin_unlock(&hb->chain_lock);
+
+		if (depth <= INETFRAGS_MAXDEPTH)
+			return inet_frag_create(nf, f, key);
+
+		if (inet_frag_may_rebuild(f))
+		{
+			if (!f->rebuild)
+				f->rebuild = true;
+			inet_frag_schedule_worker(f);
+		}
+
+		return ERR_PTR(-ENOBUFS);
 	}
-	spin_unlock(&hb->chain_lock);
+	EXPORT_SYMBOL(inet_frag_find);
 
-	if (depth <= INETFRAGS_MAXDEPTH)
-		return inet_frag_create(nf, f, key);
+	void inet_frag_maybe_warn_overflow(struct inet_frag_queue * q,
+									   const char *prefix)
+	{
+		static const char msg[] = "inet_frag_find: Fragment hash bucket"
+								  " list length grew over limit " __stringify(INETFRAGS_MAXDEPTH) ". Dropping fragment.\n";
 
-	if (inet_frag_may_rebuild(f)) {
-		if (!f->rebuild)
-			f->rebuild = true;
-		inet_frag_schedule_worker(f);
+		if (PTR_ERR(q) == -ENOBUFS)
+			net_dbg_ratelimited("%s%s", prefix, msg);
 	}
-
-	return ERR_PTR(-ENOBUFS);
-}
-EXPORT_SYMBOL(inet_frag_find);
-
-void inet_frag_maybe_warn_overflow(struct inet_frag_queue *q,
-				   const char *prefix)
-{
-	static const char msg[] = "inet_frag_find: Fragment hash bucket"
-		" list length grew over limit " __stringify(INETFRAGS_MAXDEPTH)
-		". Dropping fragment.\n";
-
-	if (PTR_ERR(q) == -ENOBUFS)
-		net_dbg_ratelimited("%s%s", prefix, msg);
-}
-EXPORT_SYMBOL(inet_frag_maybe_warn_overflow);
+	EXPORT_SYMBOL(inet_frag_maybe_warn_overflow);
