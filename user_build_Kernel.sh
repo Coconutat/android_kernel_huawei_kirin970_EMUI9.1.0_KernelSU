@@ -16,7 +16,7 @@ echo "***Setting environment...***"
 # 交叉编译器路径
 # 
 export PATH=$PATH:
-export CROSS_COMPILE=aarch64-elf-
+export CROSS_COMPILE=aarch64-linux-android-
 
 export GCC_COLORS=auto
 export ARCH=arm64

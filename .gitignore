@@ -2,3 +2,5 @@ build_Kernel.sh
 *.gz
 *.img
 log.txt
+.vscode
+out
