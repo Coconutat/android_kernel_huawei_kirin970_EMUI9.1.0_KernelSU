@@ -1,7 +1,7 @@
 build_Kernel.sh
 *.gz
 *.img
-log.txt
+logs.txt
 .vscode
 out
 1_TMP/
