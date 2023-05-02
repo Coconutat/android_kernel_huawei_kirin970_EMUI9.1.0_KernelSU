@@ -4,7 +4,7 @@ then
     echo "Find KernelSU Floder,will remove it"
 	rm -rf KernelSU
 else
-	echo "KernelSU Floder,good."
+	echo "Don't have KernelSU Floder,good."
 fi
 
 
