@@ -34,7 +34,7 @@ export EV=EXTRAVERSION=_Kirin970_Ravel_KSU_V$v
 
 #构建Ravel内核部分
 echo "***Building for Ravel version...***"
-make ARCH=arm64 O=out $EV Ravel_kirin970_defconfig
+make ARCH=arm64 O=out $EV Ravel_kirin970_KSU_defconfig
 # 定义编译线程数
 make ARCH=arm64 O=out $EV -j256
 
