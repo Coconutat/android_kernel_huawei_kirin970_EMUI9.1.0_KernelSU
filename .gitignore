@@ -1,0 +1,4 @@
+build_Kernel.sh
+*.gz
+*.img
+log.txt
