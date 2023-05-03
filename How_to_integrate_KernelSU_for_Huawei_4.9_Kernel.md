@@ -1,6 +1,6 @@
 # 如何为华为4.9版本内核集成KernelSU  
 很多朋友希望能对华为老设备集成KernelSU，但又苦于不知如何下手，于是四处求人希望一些有能力编译的朋友去编译一个。  
-正巧看到[KernelSU的概念与安装方法教程](https://www.bilibili.com/video/av952147542/)这个视频，  
+正巧看到[KernelSU旧内核编译实践教程](https://www.bilibili.com/video/BV1cX4y127gQ)这个视频，  
 里面只是简单提到华为的开源的内核在哪里下载，提示了一些对于小米的编译过程。  
 本着授人与鱼不如授人以渔的基本方针，这里会告诉大家如何为华为4.9系列(EMUI 9以及EMUI 9.1.0)内核集成KernelSU。  
 ***   
@@ -76,6 +76,11 @@ EMUI 5/8/10及其以上都不在讨论范围。
 请直接跳到**手动修改内核源码**部分。  
 同步源码的命令请使用开发版本，即这个：  
 `curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main`  
+修改hooks.c：  
+[commit](https://github.com/sticpaper/android_kernel_xiaomi_msm8998-ksu/commit/09a4672c0f521bf6b05daf24b207b125830a6fc5)  
+可选：针对EMUI9/9.1.0 SELinux强制状态导致KernelSU不工作：    
+[commit](https://github.com/Coconutat/android_kernel_huawei_ravel_KernelSU/commit/f67307c967280d9b863058e47bae7611c8bc3db9)  
+参考第166行。  
 ***  
 ### 第五节：编译  
 这个部分没啥好说的，可以参考网上很多教程。这里简单说一下就行。  
