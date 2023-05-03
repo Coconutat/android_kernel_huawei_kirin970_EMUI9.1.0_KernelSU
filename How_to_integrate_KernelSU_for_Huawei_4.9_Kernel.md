@@ -56,15 +56,11 @@ EMUI 5/8/10及其以上都不在讨论范围。
 `CONFIG_HKIP_ATKINFO=y  `  
 `CONFIG_HW_KERNEL_STP=y`  
 
-这些内容需要改称如下格式：
-`
-# CONFIG_XXXXXX is not set
-`
-例如：  
-`
-# CONFIG_HW_ROOT_SCAN is not set
-`
-这个改动的含义是不编译这些模块。  
+这些内容需要改称如下格式：  
+`# CONFIG_XXXXXX is not set`  
+例如：   
+`# CONFIG_HW_ROOT_SCAN is not set`  
+这个改动的含义是不编译这些模块。    
 
 可选部分：
 把  
