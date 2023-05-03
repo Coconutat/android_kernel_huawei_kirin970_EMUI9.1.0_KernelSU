@@ -38,24 +38,24 @@ EMUI 5/8/10及其以上都不在讨论范围。
    
  
 这里我们需要处理以下内容：  
-`
-CONFIG_HISI_PMALLOC=y
-CONFIG_HIVIEW_SELINUX=y  
-CONFIG_HISI_SELINUX_EBITMAP_RO=y  
-CONFIG_HISI_SELINUX_PROT=y  
-CONFIG_HISI_RO_LSM_HOOKS=y  
-CONFIG_HUAWEI_CRYPTO_TEST_MDPP=y  
-CONFIG_HUAWEI_SELINUX_DSM=y  
-CONFIG_HUAWEI_HIDESYMS=y  
-CONFIG_HW_SLUB_SANITIZE=y  
-CONFIG_HUAWEI_PROC_CHECK_ROOT=y  
-CONFIG_HW_ROOT_SCAN=y  
-CONFIG_HUAWEI_EIMA=y  
-CONFIG_HUAWEI_EIMA_ACCESS_CONTROL=y  
-CONFIG_HW_DOUBLE_FREE_DYNAMIC_CHECK=y  
-CONFIG_HKIP_ATKINFO=y  
-CONFIG_HW_KERNEL_STP=y
-`  
+
+`CONFIG_HISI_PMALLOC=y`  
+`CONFIG_HIVIEW_SELINUX=y  `  
+`CONFIG_HISI_SELINUX_EBITMAP_RO=y  `  
+`CONFIG_HISI_SELINUX_PROT=y  `  
+`CONFIG_HISI_RO_LSM_HOOKS=y  `   
+`CONFIG_HUAWEI_CRYPTO_TEST_MDPP=y  `  
+`CONFIG_HUAWEI_SELINUX_DSM=y  `  
+`CONFIG_HUAWEI_HIDESYMS=y  `  
+`CONFIG_HW_SLUB_SANITIZE=y  `  
+`CONFIG_HUAWEI_PROC_CHECK_ROOT=y  `  
+`CONFIG_HW_ROOT_SCAN=y  `  
+`CONFIG_HUAWEI_EIMA=y  `  
+`CONFIG_HUAWEI_EIMA_ACCESS_CONTROL=y  `  
+`CONFIG_HW_DOUBLE_FREE_DYNAMIC_CHECK=y  `  
+`CONFIG_HKIP_ATKINFO=y  `  
+`CONFIG_HW_KERNEL_STP=y`  
+
 这些内容需要改称如下格式：
 `
 # CONFIG_XXXXXX is not set
@@ -84,21 +84,18 @@ CONFIG_HW_KERNEL_STP=y
 ### 第五节：编译  
 这个部分没啥好说的，可以参考网上很多教程。这里简单说一下就行。  
 安装依赖：
-`sudo apt install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip bc`  
-设置环境变量：
-`
-export ARCH=arm64
-export PATH=$PATH:/media/coconutat/Files/Downloads/Github/android_kernel_huawei_ravel_KernelSU/android_kernel_huawei_ravel_KernelSU/aarch64-linux-android-4.9/bin
-export CROSS_COMPILE=aarch64-linux-android-
-`
+`sudo apt install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip bc`    
+设置环境变量：  
+`export ARCH=arm64`
+`export PATH=$PATH:/media/coconutat/Files/Downloads/Github/android_kernel_huawei_ravel_KernelSU`  
+`android_kernel_huawei_ravel_KernelSU/aarch64-linux-android-4.9/bin`  
+`export CROSS_COMPILE=aarch64-linux-android-`  
 这里第一行是声明你要编译arm64架构的内核。  
 第二行，第三行是声明你的交叉编译器的路径，需要根据你自己的路径进行修改。  
    
 编译命令：   
-`
-make ARCH=arm64 O=out XXXXXX_defconfig
-make ARCH=arm64 O=out -j8
-`
+`make ARCH=arm64 O=out XXXXXX_defconfig`  
+`make ARCH=arm64 O=out -j8`  
 这里第一行是声明你编译的内核的defconfig，需要根据你自己的defconfig名称进行修改。   
 第二行是声明编译的线程数，基于CPU核心数量x2即可，我是4核心，所以是8。  
 
@@ -111,13 +108,14 @@ make ARCH=arm64 O=out -j8
 `
 #!/bin/bash
 ./mkbootimg --kernel kernel --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=enforcing buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07C00000 --header_version 1 --os_version 9 --os_patch_level 2020-01-01  --output kernel.img
-`
+`  
+  
 --kernel kernel 这部分指的是内核文件的位置。假设你把内核复制进tools文件夹了，那应该修改成：  
-`--kernel Image.gz`  
+`--kernel Image.gz`    
 --output kernel.img 这部分指的是内核打包后的名字，如果你想更改成你喜欢名字，可以改成：  
-`--output KernelSU_kernel.img`  
-
-可选：  
+`--output KernelSU_kernel.img`    
+  
+可选：   
 如果你在上面更改defconfig的时候开启了**CONFIG_SECURITY_SELINUX_DEVELOP**，  
 那么你可以在  
 `androidboot.selinux=enforcing`  
