@@ -1,6 +1,8 @@
 # android_kernel_huawei_ravel_KernelSU
 荣耀 Note10 内核集成KernelSU版本。  
 测试版本。  
+因KernelSU的代码问题导致华为的SELinux工作不正常，所以EMUI 9.1.0 KernelSU会失效。  
+但是刷大于或等于安卓 10 GSI就没问题。  
 交叉编译器下载：[aarch64-linux-android-4.9_refs_heads_pie-release](https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/refs/heads/pie-release.tar.gz)  
 
 ### 如何为华为EMUI9/9.1.0集成KernelSU
