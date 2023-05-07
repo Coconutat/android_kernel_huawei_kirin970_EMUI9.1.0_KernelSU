@@ -37,7 +37,8 @@ EMUI 5/8/10及其以上都不在讨论范围。
 这个文件是用来确认哪些内核组建需要编译，哪些不需要编译。  
    
  
-这里我们需要处理以下内容：  
+**这里我们需要处理以下内容**： 
+> 有些可能没有，如果有就做改动，没有则无需。
 
 `CONFIG_HISI_PMALLOC=y`  
 `CONFIG_HIVIEW_SELINUX=y  `  
@@ -55,6 +56,8 @@ EMUI 5/8/10及其以上都不在讨论范围。
 `CONFIG_HW_DOUBLE_FREE_DYNAMIC_CHECK=y  `  
 `CONFIG_HKIP_ATKINFO=y  `  
 `CONFIG_HW_KERNEL_STP=y`  
+`CONFIG_HISI_HHEE=y`    
+`CONFIG_HISI_HHEE_TOKEN=y`   
 
 这些内容需要改称如下格式：  
 `# CONFIG_XXXXXX is not set`  
@@ -62,13 +65,21 @@ EMUI 5/8/10及其以上都不在讨论范围。
 `# CONFIG_HW_ROOT_SCAN is not set`  
 这个改动的含义是不编译这些模块。    
 
-可选部分：
+**可选部分**：
 把  
 `# CONFIG_SECURITY_SELINUX_DEVELOP is not set `  
 改为  
 `CONFIG_SECURITY_SELINUX_DEVELOP=y`  
 改动此处是方便开机的时候手机SELinux默认是Permissive状态。  
-> 注：在集成KernelSU的情况下，此处仅限刷入高于安卓9以上的GSI系统的情况下。原因会在下面解释。    
+> 注：在集成KernelSU的情况下，此处仅限刷入高于安卓9以上的GSI系统的情况下。原因会在下面解释。  
+  
+关闭AVB验证：  
+`CONFIG_DM_VERITY=y`  
+`CONFIG_DM_VERITY_AVB=y`  
+改为  
+`# CONFIG_DM_VERITY=y is not set`  
+`# CONFIG_DM_VERITY_AVB=y is not set`  
+  
 ***  
 ### 第四节：集成KernelSU  
 因为华为的kprobe工作并不正常。所以请按照官方指南去修改内核源码。  
