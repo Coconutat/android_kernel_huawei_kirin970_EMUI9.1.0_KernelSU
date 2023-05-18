@@ -6,3 +6,4 @@ logs.txt
 out
 1_TMP/
 drivers/kernelsu
+logs*.txt
