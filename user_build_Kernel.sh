@@ -25,20 +25,20 @@ then
 	mkdir out
 fi
 
-#输入Ravel内核版本号
+#输入内核版本号
 printf "Please enter Ravel Kernel version number: "
 read v
 echo " "
 echo "Setting EXTRAVERSION"
 export EV=EXTRAVERSION=_Kirin970_Ravel_KSU_V$v
 
-#构建Ravel内核部分
+#构建内核部分
 echo "***Building for Ravel version...***"
 make ARCH=arm64 O=out $EV Ravel_kirin970_defconfig
 # 定义编译线程数
 make ARCH=arm64 O=out $EV -j256
 
-#打包Ravel版内核
+#打包内核
 
 if [ -f out/arch/arm64/boot/Image.gz ];
 then
