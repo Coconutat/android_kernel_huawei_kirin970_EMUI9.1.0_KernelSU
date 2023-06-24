@@ -3,6 +3,7 @@ build_Kernel.sh
 *.img
 log.txt
 .vscode
+kernel_log*.txt
 out
 1_TMP/
 drivers/kernelsu
