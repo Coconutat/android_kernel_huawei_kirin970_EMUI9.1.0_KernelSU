@@ -103,5 +103,5 @@ jobs:
     - name: Upload Ravel-KSU-Kernel-EPM
       uses: actions/upload-artifact@v3
       with:
-          name: Kirin970_Ravel_KSU_9.1.0-GSI-${{ steps.get_time.outputs.TIME }}
+          name: Kirin970_Ravel_KSU_9.1.0-EPM-${{ steps.get_time.outputs.TIME }}
           path: "Kirin970_Ravel_KSU_9.1.0_PM-EPM-${{ steps.get_time.outputs.TIME }}.img"
