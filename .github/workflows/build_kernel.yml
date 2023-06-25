@@ -68,4 +68,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Kirin970_Ravel_KSU_9.1.0-${{ steps.get_time.outputs.TIME }}
-        path: "Kirin970_Ravel_KSU_9.1.0_*.img"
+        path: "Kirin970_Ravel_KSU_9.1.0*.img"
