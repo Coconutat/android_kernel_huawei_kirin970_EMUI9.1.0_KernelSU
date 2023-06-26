@@ -1,6 +1,8 @@
 # android_kernel_huawei_ravel_KernelSU  
 ***
-[![Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel.yml/badge.svg)](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel.yml)
+[![Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel-GSI](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel_GSI.yml/badge.svg?branch=Github-Action)](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel_GSI.yml)
+
+[![Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel-EPM](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel_EPM.yml/badge.svg?branch=Github-Action)](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel_EPM.yml)
   
 ![Downloads](https://img.shields.io/github/downloads/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/total)    
 ***
@@ -19,3 +21,7 @@
 全自动，解放你的双手，无需Linux设备！！
 **下载：[Github Action](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/)**    
 **什么。无法下载？请确保您登陆了Github账户。**  
+
+# 编译的版本:  
+1. Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel-GSI:GSI系统专用。内有两个内核，带PM的代表开机时SELinux为宽容模式。
+2. Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel-EPM:Huawei EMUI 9.1.0专用。内核强制SELinux为宽容模式。  
