@@ -1,7 +1,7 @@
 build_Kernel.sh
 *.gz
 *.img
-log.txt
+log*.txt
 .vscode
 kernel_log*.txt
 out
