@@ -66,39 +66,3 @@ jobs:
       with:
         name: Kirin970_Ravel_KSU_9.1.0-GSI-${{ steps.get_time.outputs.TIME }}
         path: "Kirin970_Ravel_KSU_9.1.0*.img"
-
-    - name: Make clean
-      run: |
-          echo "TIME_v2=$(TZ=UTC-8 date +%m%d%H%M )" >> $GITHUB_OUTPUT
-          rm -rf out
-          rm -rf Kirin970_Ravel_KSU_9.1.0*.img
-          make mrproper
-  
-    - name: Build Kernel EPM Version
-      run: |
-         if [ -d include/config ];
-          then
-           echo "Find config,will remove it"
-           rm -rf include/config
-         else
-          echo "No Config,good."
-         fi
-  
-         cp -rf MOD_FILE/selinuxfs/selinuxfs.c security/selinux/selinuxfs.c
-         rm -rf KernelSU
-         rm -rf drivers/kernelsu
-         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
-         export PATH=$(pwd)/aarch64-linux-android-4.9/bin/:$PATH
-         export ARCH=arm64
-         export SUBARCH=arm64
-         make $KERNEL_CMDLINE Ravel_kirin970_KSU_defconfig
-         make $KERNEL_CMDLINE -j$(nproc --all)
-
-  
-         tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=permissive buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07C00000 --header_version 1 --os_version 9 --os_patch_level 2020-01-01  --output Kirin970_Ravel_KSU_9.1.0_PM-EPM-${{ steps.get_time.outputs.TIME }}.img
-  
-    - name: Upload Ravel-KSU-Kernel-EPM
-      uses: actions/upload-artifact@v3
-      with:
-          name: Kirin970_Ravel_KSU_9.1.0-EPM-${{ steps.get_time.outputs.TIME }}
-          path: "Kirin970_Ravel_KSU_9.1.0_PM-EPM-${{ steps.get_time.outputs.TIME }}.img"
