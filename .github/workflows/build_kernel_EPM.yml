@@ -1,4 +1,4 @@
-name: Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel
+name: Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel-EPM
 on:
   workflow_dispatch:
   schedule:
