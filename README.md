@@ -2,7 +2,7 @@
 ***
 [![Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel.yml/badge.svg)](https://github.com/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/actions/workflows/build_kernel.yml)
   
-![Downloads](https://img.shields.io/github/downloads/Coconutat/android_kernel_huawei_vtr_emui9_KernelSU/total)    
+![Downloads](https://img.shields.io/github/downloads/Coconutat/android_kernel_huawei_kirin970_EMUI9.1.0_KernelSU/total)    
 ***
 荣耀 Note10 内核集成KernelSU版本。  
 测试版本。  
