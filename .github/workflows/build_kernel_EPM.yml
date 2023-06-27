@@ -2,8 +2,8 @@ name: Build Huawei-Kirin970-EMUI9.1.0-KSU-Kernel-EPM
 on:
   workflow_dispatch:
   schedule:
-      # Run once a week on Sunday at midnight. See http://crontab.guru
-      - cron: '0 21 * * *'
+     # Run once at 12:00 on Saturday. See http://crontab.guru
+     - cron: '00 12 * * 6'
   push:
     branches:
       - HEAD
